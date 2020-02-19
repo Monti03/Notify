@@ -43,12 +43,12 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
         val oldId = sharedPref.getString("ID", "defaultValue")
-        Log.e("before", oldId)
+        Log.d("before", oldId)
         if(oldId == "defaultValue"){
 
             FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this) { instanceIdResult ->
                 val newToken = instanceIdResult.token
-                Log.e("newToken", newToken)
+                Log.d("newToken", newToken)
                 this.getPreferences(Context.MODE_PRIVATE).edit().putString("fb", newToken).apply()
 
                 functions = FirebaseFunctions.getInstance()
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                                 val e = task.exception
                                 Log.e("getting the new id", e.toString())
                             } else {
-                                Log.e("getting the new id", task.result)
+                                Log.d("getting the new id", task.result)
 
                                 val res = stringToString(task.result)
 
@@ -82,13 +82,14 @@ class MainActivity : AppCompatActivity() {
 
         else{
             val oldId = stringToString(sharedPref.getString("ID", "defaultValue"))
-            Log.e("old Id", oldId)
+            Log.d("old Id", oldId)
 
             displayId(oldId)
         }
 
         FirebaseInstanceId.getInstance().instanceId.addOnFailureListener(this) {instanceIdResult ->
             Log.e("newToken", "error")
+
         }
 
     }
@@ -115,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
         val data : HashMap<String, String>  = hashMapOf("token" to token)
 
-        Log.e("before calling", "before calling")
+        Log.d("before calling", "before calling")
         return functions
                 .getHttpsCallable("addToken")
                 .call(data)

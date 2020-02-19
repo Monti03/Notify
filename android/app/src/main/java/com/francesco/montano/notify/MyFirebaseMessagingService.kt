@@ -18,7 +18,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.e("MyFirebaseMessagingService", "From: " + remoteMessage.from!!)
+        Log.d("MyFirebaseMessagingService", "From: " + remoteMessage.from!!)
 
 
 
@@ -26,8 +26,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
-            Log.e("MyFirebaseMessagingService", "Message Notification Body: " + remoteMessage.notification!!.body!!)
-            Log.e("MyFirebaseMessagingService", "Message Notification Body: " + remoteMessage.notification!!.title!!)
+            Log.d("MyFirebaseMessagingService", "Message Notification Body: " + remoteMessage.notification!!.body!!)
+            Log.d("MyFirebaseMessagingService", "Message Notification Body: " + remoteMessage.notification!!.title!!)
 
             var builder = NotificationCompat.Builder(this, "Notify")
                     .setSmallIcon(R.drawable.ic_stat_ic_notification)
@@ -51,7 +51,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String) {
-        Log.e("MyFirebaseMessagingService", "Refreshed token: $token")
+        Log.d("MyFirebaseMessagingService", "Refreshed token: $token")
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
