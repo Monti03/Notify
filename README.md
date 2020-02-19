@@ -16,5 +16,5 @@ To send a notification with Text, Title and to a user with Token you have to exe
 
 
 
-apk download](https://arcane-tor-21270.herokuapp.com/)
+[apk download](https://arcane-tor-21270.herokuapp.com/)
 
