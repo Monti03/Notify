@@ -21,6 +21,8 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Build
 import android.util.JsonToken
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -41,42 +43,62 @@ class MainActivity : AppCompatActivity() {
 
         val fms = MyFirebaseMessagingService()
 
+
         val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
         val oldId = sharedPref.getString("ID", "defaultValue")
         Log.d("before", oldId)
-        if(oldId == "defaultValue"){
+        if(oldId == "defaultValue"){ // I have to generate a new token
 
-            FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this) { instanceIdResult ->
-                val newToken = instanceIdResult.token
-                Log.d("newToken", newToken)
-                this.getPreferences(Context.MODE_PRIVATE).edit().putString("fb", newToken).apply()
+            //var progressBar = findViewById<ProgressBar>(R.id.progressBar) as ProgressBar
 
-                functions = FirebaseFunctions.getInstance()
+            Thread(Runnable {
+                // dummy thread mimicking some operation whose progress cannot be tracked
 
-                addToken(newToken)
-                        .addOnCompleteListener(OnCompleteListener { task ->
+                // display the indefinite progressbar
+                this@MainActivity.runOnUiThread(java.lang.Runnable {
+                    findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+                })
 
-                            if (!task.isSuccessful) {
-                                val e = task.exception
-                                Log.e("getting the new id", e.toString())
-                            } else {
-                                Log.d("getting the new id", task.result)
+                FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this) { instanceIdResult ->
+                    val newToken = instanceIdResult.token
+                    Log.d("newToken", newToken)
+                    this.getPreferences(Context.MODE_PRIVATE).edit().putString("fb", newToken).apply()
 
-                                val res = stringToString(task.result)
+                    functions = FirebaseFunctions.getInstance()
 
-                                val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
-                                with (sharedPref.edit()) {
-                                    putString("ID", res)
-                                    commit()
+                    addToken(newToken)
+                            .addOnCompleteListener(OnCompleteListener { task ->
+
+                                if (!task.isSuccessful) {
+                                    val e = task.exception
+                                    Log.e("getting the new id", e.toString())
+                                } else {
+                                    Log.d("getting the new id", task.result)
+
+                                    val res = stringToString(task.result)
+
+                                    val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
+                                    with (sharedPref.edit()) {
+                                        putString("ID", res)
+                                        commit()
+                                    }
+                                    // when is completed, make progressBar gone
+                                    this@MainActivity.runOnUiThread(java.lang.Runnable {
+                                        findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+
+                                        //findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
+                                    })
+                                    displayId(res)
+
                                 }
 
-                                displayId(res)
+                            })
 
-                            }
+                }
 
-                        })
+            }).start()
 
-            }
+
 
         }
 
