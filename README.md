@@ -16,5 +16,5 @@ To send a notification with Text, Title and to a user with Token you have to exe
   <img src= "./media/Notification_example.jpg" width="144px" height="256px"><img src= "./media/token.jpg" width="144px" height="256px">
 
 
-[Downlaod from amazon store](https://www.amazon.com/dp/B084Z7YXRZ/ref=sr_1_9?keywords=notify&qid=1582188996&sr=8-9)
+[Download from amazon store](https://www.amazon.com/dp/B084Z7YXRZ/ref=sr_1_9?keywords=notify&qid=1582188996&sr=8-9)
 
